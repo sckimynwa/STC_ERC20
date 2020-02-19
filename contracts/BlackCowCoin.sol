@@ -1,4 +1,4 @@
-pragma solidity ^0.4.4;
+pragma solidity >= 0.4.4;
 
 contract Token {
 
@@ -50,7 +50,9 @@ contract StandardToken is Token {
             balances[_to] += _value;
             Transfer(msg.sender, _to, _value);
             return true;
-        } else { return false; }
+        } else { 
+            return false; 
+        }
     }
 
     function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
@@ -62,7 +64,9 @@ contract StandardToken is Token {
             allowed[_from][msg.sender] -= _value;
             Transfer(_from, _to, _value);
             return true;
-        } else { return false; }
+        } else { 
+            return false; 
+        }
     }
 
     function balanceOf(address _owner) constant returns (uint256 balance) {
@@ -97,7 +101,7 @@ contract HashnodeTestCoin is StandardToken { // CHANGE THIS. Update the contract
     string public name;                   // Token Name
     uint8 public decimals;                // How many decimals to show. To be standard complicant keep it 18
     string public symbol;                 // An identifier: eg SBX, XPR etc..
-    string public version = 'H1.0'; 
+    string public version = "H1.0"; 
     uint256 public unitsOneEthCanBuy;     // How many units of your coin can be bought by 1 ETH?
     uint256 public totalEthInWei;         // WEI is the smallest unit of ETH (the equivalent of cent in USD or satoshi in BTC). We'll store the total ETH raised via our ICO here.  
     address public fundsWallet;           // Where should the raised ETH go?
@@ -114,7 +118,7 @@ contract HashnodeTestCoin is StandardToken { // CHANGE THIS. Update the contract
         fundsWallet = msg.sender;                                    // The owner of the contract gets ETH
     }
 
-    function() payable{
+    function() payable {
         totalEthInWei = totalEthInWei + msg.value;
         uint256 amount = msg.value * unitsOneEthCanBuy;
         require(balances[fundsWallet] >= amount);
@@ -125,7 +129,7 @@ contract HashnodeTestCoin is StandardToken { // CHANGE THIS. Update the contract
         Transfer(fundsWallet, msg.sender, amount); // Broadcast a message to the blockchain
 
         //Transfer ether to fundsWallet
-        fundsWallet.transfer(msg.value);                               
+        fundsWallet.transfer(msg.value);
     }
 
     /* Approves and then calls the receiving contract */
@@ -136,7 +140,9 @@ contract HashnodeTestCoin is StandardToken { // CHANGE THIS. Update the contract
         //call the receiveApproval function on the contract you want to be notified. This crafts the function signature manually so one doesn't have to include a contract in here just for this.
         //receiveApproval(address _from, uint256 _value, address _tokenContract, bytes _extraData)
         //it is assumed that when does this that the call *should* succeed, otherwise one would use vanilla approve instead.
-        if(!_spender.call(bytes4(bytes32(sha3("receiveApproval(address,uint256,address,bytes)"))), msg.sender, _value, this, _extraData)) { throw; }
+        if (!_spender.call(bytes4(bytes32(sha3("receiveApproval(address,uint256,address,bytes)"))), msg.sender, _value, this, _extraData)) { 
+            throw; 
+        }
         return true;
     }
 }
